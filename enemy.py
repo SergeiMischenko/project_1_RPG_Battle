@@ -4,7 +4,6 @@ from random import randint, choice
 class Enemy:
     def __init__(self, race):
         self.race = race
-        self.gold = randint(0, 20)
         match race:
             case 'Гоблин':
                 self.hp = randint(5, 8)
@@ -26,3 +25,13 @@ class Enemy:
                 self.weapon = "Ветка"
                 self.armor = 0
                 self.xp = 2
+        self.gold = randint(0, 20)
+
+
+def create_enemy():
+    enemy1 = Enemy('Гоблин')
+    enemy2 = Enemy('Орк')
+    enemy3 = Enemy('Чародей')
+    print(enemy1.__dict__)
+    print(enemy2.__dict__)
+    print(enemy3.__dict__)
