@@ -4,7 +4,7 @@ from random import randint, choice
 class Enemy:
     enemy_races = {"Гоблин": {"Палка": 4, "Кинжал": 7, "Метательные ножи": 5},
                    "Орк": {"Дубина": 10, "Секира": 15, "Молот": 12},
-                   "Чародей": {"Посох": 10, "Жезл": 12, "Магический шар": 8}}
+                   "Чернокнижник": {"Посох": 10, "Жезл": 12, "Магический шар": 8}}
 
     def __init__(self, race):
         self.race = race
@@ -21,7 +21,7 @@ class Enemy:
                 self.damage = self.enemy_races[self.race][self.weapon]
                 self.armor = 10 + randint(2, 15)
                 self.xp = choice([10, 12, 15, 20])
-            case 'Чародей':
+            case 'Чернокнижник':
                 self.hp = randint(8, 12)
                 self.weapon = choice(list(self.enemy_races[self.race].keys()))
                 self.damage = self.enemy_races[self.race][self.weapon]
@@ -38,11 +38,37 @@ class Enemy:
         else:
             object.__setattr__(self, key, value)
 
+    def get_attack(self, player):
+        if self.get_status_enemy():
+            damage = self.damage - (self.damage * player.armor / 100)
+            player.hp = round(player.hp - damage)
+            print(f"{self.race} наносит удар с помощью '{self.weapon}' по герою '{player.name}', урон: {round(damage)}")
+            if player.hp <= 0:
+                player.hp = 0
+                print(f"'{player.name}' погиб в бою от руки '{self.race}а'")
+            else:
+                print(f"{player.name} у вас осталось {player.hp} очков здоровья")
+
+    def get_status_enemy(self):
+        return not self.hp <= 0
+
 
 def create_enemy():
-    enemy1 = Enemy('Гоблин')
-    enemy2 = Enemy('Орк')
-    enemy3 = Enemy('Чародей')
-    print(enemy1.__dict__)
-    print(enemy2.__dict__)
-    print(enemy3.__dict__)
+    enemy_list = [Enemy('Гоблин'), Enemy('Орк'), Enemy('Чернокнижник')]
+    return enemy_list
+
+
+def get_list_enemy(enemy_list):
+    print("*" * 20)
+    for ind, enemy in enumerate(enemy_list, 1):
+        print(f"{ind}. {enemy.race} ({enemy.hp}) ОЗ")
+    print("*" * 20)
+
+
+def get_status_enemy(enemy_list):
+    ind = 0
+    while ind < len(enemy_list):
+        if enemy_list[ind].hp <= 0:
+            enemy_list.pop(ind)
+        ind += 1
+    return enemy_list

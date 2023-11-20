@@ -3,7 +3,7 @@ from random import randint
 
 class Player:
     player_classes = {"Воин": {"Двуручный Меч": 20, "Топорик": 15, "Кувалда": 18, "Меч и Щит": 10},
-                      "Рейнджер": {"Кинжал": 8, "Меч": 12, "Лук": 16},
+                      "Рейнджер": {"Кинжал": 8, "Меч": 12, "Лук": 16, "Арбалет": 18},
                       "Маг": {"Посох": 12, "Жезл": 15, "Магический шар": 10}}
 
     def __init__(self, name, class_, weapon):
@@ -36,6 +36,16 @@ class Player:
         else:
             object.__setattr__(self, key, value)
 
+    def get_attack(self, enemy):
+        damage = self.damage - (self.damage * enemy.armor / 100)
+        enemy.hp = round(enemy.hp - damage)
+        print(f"{self.name} наносит удар с помощью '{self.weapon}' по '{enemy.race}у', урон: {round(damage)}")
+        if enemy.hp <= 0:
+            self.xp, self.gold, enemy.hp, enemy.xp, enemy.gold = self.xp + enemy.xp, self.gold + enemy.gold, 0, 0, 0
+            print(f"'{enemy.race}' повержен от вашей руки")
+        else:
+            print(f"У '{enemy.race}а' осталось {enemy.hp} очков здоровья")
+
 
 def create_player():
     print('-' * 35)
@@ -52,17 +62,14 @@ def create_player():
         print(f"\t{ind}. {amount}")
     print('-' * 20)
     weapon = valid_weapon(input(f"{name_player} выбери оружие класса из списка выше: "), Player.player_classes, class_)
-
-    player = Player(name_player, class_, weapon)
-    print()
-    print(player.__dict__)
+    return Player(name_player, class_, weapon)
 
 
 def valid_name(name):
     while True:
         if not name.strip():
             print("\nИмя не может быть пустым")
-        elif name.startswith(tuple(str(map(str, range(10))) + ' ')):
+        elif name.strip().startswith(tuple(str(map(str, range(10))))):
             print("\nИмя не может начинаться с цифр или пробела")
         else:
             break
@@ -74,25 +81,42 @@ def valid_class(amount, classes):
     while True:
         if not amount.strip():
             print("\nТы же ничего не ввёл")
-        elif amount not in classes and amount not in map(str, range(1, len(classes) + 1)):
+        elif amount.title() not in classes and amount not in map(str, range(1, len(classes) + 1)):
             print("\nТакого класса не существует, возможно ты ошибся")
         else:
             break
         amount = input("Попробуй ещё разок: ")
     if amount.isdigit():
         amount = list(classes.keys())[int(amount) - 1]
-    return amount
+    return amount.title()
 
 
 def valid_weapon(amount, classes, class_):
     while True:
         if not amount.strip():
             print("\nТы же ничего не ввёл")
-        elif amount not in classes[class_] and amount not in map(str, range(1, len(classes[class_]) + 1)):
+        elif amount.title() not in classes[class_] and amount not in map(str, range(1, len(classes[class_]) + 1)):
             print("\nТакого оружия не существует, возможно ты ошибся")
         else:
             break
         amount = input("Попробуй ещё разок: ")
     if amount.isdigit():
         amount = list(classes[class_].keys())[int(amount) - 1]
-    return amount
+    return amount.title()
+
+
+def valid_target(amount, enemy_list):
+    while True:
+        if not amount.strip():
+            print("\nТы же ничего не ввёл")
+        elif amount.title() not in [i.race for i in enemy_list] and amount not in map(str,
+                                                                                      range(1, len(enemy_list) + 1)):
+            print("\nТакого врага тут нет, возможно ты ошибся")
+        else:
+            break
+        amount = input("Попробуй ещё разок: ")
+    if amount.isalpha():
+        amount = ''.join([str(ind) for ind, value in enumerate(enemy_list) if value.race == amount.title()])
+    elif amount.isdigit():
+        amount = int(amount) - 1
+    return int(amount)
