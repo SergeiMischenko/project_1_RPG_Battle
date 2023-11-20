@@ -1,12 +1,17 @@
-from random import randint, choice
+from random import randint
 
 
 class Player:
+    player_classes = {"Воин": {"Двуручный Меч": 20, "Топорик": 15, "Кувалда": 18, "Меч и Щит": 10},
+                      "Рейнджер": {"Кинжал": 8, "Меч": 12, "Лук": 16},
+                      "Маг": {"Посох": 12, "Жезл": 15, "Магический шар": 10}}
+
     def __init__(self, name, class_, weapon):
         self.name = name
         self.class_ = class_
-        self.hp = 100
+        self.hp = 50
         self.weapon = weapon
+        self.damage = self.player_classes[self.class_][self.weapon]
         match class_:
             case "Воин":
                 match weapon:
@@ -19,28 +24,34 @@ class Player:
             case "Маг":
                 self.armor = 5
         self.xp = 0
+        self.level = 1
         self.gold = 0
+
+    def __getattribute__(self, item):
+        return object.__getattribute__(self, item)
+
+    def __setattr__(self, key, value):
+        if key == 'name' and hasattr(self, 'name') or key == 'class_' and hasattr(self, 'class_'):
+            print('Вы не можете изменять имя и класс вашего героя')
+        else:
+            object.__setattr__(self, key, value)
 
 
 def create_player():
-    classes = {"Воин": ["Двуручный Меч", "Топорик", "Кувалда", "Меч и Щит"],
-               "Рейнджер": ["Кинжал", "Меч", "Лук"],
-               "Маг": ["Посох", "Жезл", "Магический шар"]}
-
     print('-' * 35)
     name_player = valid_name(input("Введи имя своего героя: "))
 
     print('-' * 20)
-    for ind, amount in enumerate(classes, 1):
+    for ind, amount in enumerate(Player.player_classes, 1):
         print(f"\t{ind}. {amount}")
     print('-' * 20)
-    class_ = valid_class(input(f"{name_player} выбери свой класс из списка выше: "), classes)
+    class_ = valid_class(input(f"{name_player} выбери свой класс из списка выше: "), Player.player_classes)
 
     print('-' * 20)
-    for ind, amount in enumerate(classes[class_], 1):
+    for ind, amount in enumerate(Player.player_classes[class_], 1):
         print(f"\t{ind}. {amount}")
     print('-' * 20)
-    weapon = valid_weapon(input(f"{name_player} выбери оружие для своего класса из списка выше: "), classes, class_)
+    weapon = valid_weapon(input(f"{name_player} выбери оружие класса из списка выше: "), Player.player_classes, class_)
 
     player = Player(name_player, class_, weapon)
     print()
@@ -83,5 +94,5 @@ def valid_weapon(amount, classes, class_):
             break
         amount = input("Попробуй ещё разок: ")
     if amount.isdigit():
-        amount = classes[class_][int(amount) - 1]
+        amount = list(classes[class_].keys())[int(amount) - 1]
     return amount
