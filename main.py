@@ -9,13 +9,12 @@ def main():
     player = create_player()
     enemy_list = create_enemy()
     while True:
-        print()
         enemy_list = get_status_enemy(enemy_list)
         if not player.hp or not enemy_list:
-            print(f"{RED}!!!-----ИГРА ОКОНЧЕНА-----!!!")
+            print(f"\n\t{RED}!!!-----ИГРА ОКОНЧЕНА-----!!!")
             break
         get_list_enemy(enemy_list)
-        target = valid_target(input(f"\n{YELLOW}Выберите кого атаковать: "), enemy_list)
+        target = valid_target(input(f"{YELLOW}Выберите кого атаковать: "), enemy_list)
         player.get_attack(enemy_list[target])
         enemy_list[0].get_attack(player)
 

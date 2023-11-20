@@ -92,7 +92,7 @@ def valid_class(amount, classes):
         if not amount.strip():
             print(f"\n{MAGENTA}Ты же ничего не ввёл")
         elif amount.title() not in classes and amount not in map(str, range(1, len(classes) + 1)):
-            print(r"\n{MAGENTA}Такого класса не существует, возможно ты ошибся")
+            print(f"\n{MAGENTA}Такого класса не существует, возможно ты ошибся")
         else:
             break
         amount = input(f"{YELLOW}Попробуй ещё разок: ")
