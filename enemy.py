@@ -1,11 +1,12 @@
 from random import randint, choice
 from time import sleep
+from my_coloram import MAGENTA, BLUE, YELLOW, RED
 
 
 class Enemy:
-    enemy_races = {"Гоблин": {"Палка": 4, "Кинжал": 7, "Метательные ножи": 5},
+    enemy_races = {"Гоблин": {"Палка": 4, "Кинжал": 7, "Метательные Ножи": 5},
                    "Орк": {"Дубина": 10, "Секира": 15, "Молот": 12},
-                   "Чернокнижник": {"Посох": 10, "Жезл": 12, "Магический шар": 8}}
+                   "Чернокнижник": {"Посох": 10, "Жезл": 12, "Магический Шар": 8}}
 
     def __init__(self, race):
         self.race = race
@@ -35,7 +36,7 @@ class Enemy:
 
     def __setattr__(self, key, value):
         if key == 'race' and hasattr(self, 'race'):
-            print('Вы не можете изменять расу врага')
+            print(f'{MAGENTA}Вы не можете изменять расу врага')
         else:
             object.__setattr__(self, key, value)
 
@@ -43,14 +44,16 @@ class Enemy:
         if self.get_status_enemy():
             damage = self.damage - (self.damage * player.armor / 100)
             player.hp = round(player.hp - damage)
-            print(f"{self.race} наносит удар с помощью '{self.weapon}' по герою '{player.name}', урон: {round(damage)}")
+            print(
+                f"{RED}{self.race}{YELLOW} наносит удар с помощью {BLUE}'{self.weapon}'"
+                f"{YELLOW} по герою {BLUE}'{player.name}'{YELLOW}, урон: {RED}{round(damage)}")
             if player.hp <= 0:
                 player.hp = 0
-                print(f"'{player.name}' погиб в бою от руки '{self.race}а'")
+                print(f"{BLUE}'{player.name}'{YELLOW} погиб в бою от руки {RED}'{self.race}а'")
             else:
-                print(f"{player.name} у вас осталось {player.hp} очков здоровья")
+                print(f"{BLUE}{player.name}{YELLOW} у вас осталось {RED}{player.hp}{YELLOW} очков здоровья")
             print('-' * 20)
-            sleep(4)
+            sleep(2)
 
     def get_status_enemy(self):
         return not self.hp <= 0
@@ -64,7 +67,7 @@ def create_enemy():
 def get_list_enemy(enemy_list):
     print("*" * 20)
     for ind, enemy in enumerate(enemy_list, 1):
-        print(f"{ind}. {enemy.race} ({enemy.hp}) ОЗ")
+        print(f"{RED}{ind}. {enemy.race} ({enemy.hp}) ОЗ")
     print("*" * 20)
 
 
