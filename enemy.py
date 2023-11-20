@@ -1,4 +1,5 @@
 from random import randint, choice
+from time import sleep
 
 
 class Enemy:
@@ -48,6 +49,8 @@ class Enemy:
                 print(f"'{player.name}' погиб в бою от руки '{self.race}а'")
             else:
                 print(f"{player.name} у вас осталось {player.hp} очков здоровья")
+            print('-' * 20)
+            sleep(4)
 
     def get_status_enemy(self):
         return not self.hp <= 0

@@ -3,7 +3,7 @@ from enemy import create_enemy, get_list_enemy, get_status_enemy
 
 
 def main():
-    print(f"Приветствуем вас в игре RPG Battle, сейчас вам предстоит создать своего персонажа.")
+    print("Приветствуем вас в игре RPG Battle, сейчас вам предстоит создать своего персонажа.")
     input("Нажмите ENTER чтобы продолжить...")
     player = create_player()
     enemy_list = create_enemy()
@@ -14,10 +14,9 @@ def main():
             print("-----ИГРА ОКОНЧЕНА!-----")
             break
         get_list_enemy(enemy_list)
-        target = valid_target(input("Выберите кого атаковать: "), enemy_list)
+        target = valid_target(input("\nВыберите кого атаковать: "), enemy_list)
         player.get_attack(enemy_list[target])
         enemy_list[0].get_attack(player)
-        print(f'У вас: {player.xp} Опыта и: {player.gold} золота')
 
 
 if __name__ == "__main__":

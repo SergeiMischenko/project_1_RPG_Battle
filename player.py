@@ -1,4 +1,5 @@
 from random import randint
+from time import sleep
 
 
 class Player:
@@ -39,12 +40,16 @@ class Player:
     def get_attack(self, enemy):
         damage = self.damage - (self.damage * enemy.armor / 100)
         enemy.hp = round(enemy.hp - damage)
+        sleep(2)
+        print('-' * 20)
         print(f"{self.name} наносит удар с помощью '{self.weapon}' по '{enemy.race}у', урон: {round(damage)}")
         if enemy.hp <= 0:
             self.xp, self.gold, enemy.hp, enemy.xp, enemy.gold = self.xp + enemy.xp, self.gold + enemy.gold, 0, 0, 0
             print(f"'{enemy.race}' повержен от вашей руки")
         else:
             print(f"У '{enemy.race}а' осталось {enemy.hp} очков здоровья")
+        print('-' * 20)
+        sleep(4)
 
 
 def create_player():
@@ -55,12 +60,14 @@ def create_player():
     for ind, amount in enumerate(Player.player_classes, 1):
         print(f"\t{ind}. {amount}")
     print('-' * 20)
+    sleep(1)
     class_ = valid_class(input(f"{name_player} выбери свой класс из списка выше: "), Player.player_classes)
 
     print('-' * 20)
     for ind, amount in enumerate(Player.player_classes[class_], 1):
         print(f"\t{ind}. {amount}")
     print('-' * 20)
+    sleep(1)
     weapon = valid_weapon(input(f"{name_player} выбери оружие класса из списка выше: "), Player.player_classes, class_)
     return Player(name_player, class_, weapon)
 
