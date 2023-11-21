@@ -17,26 +17,26 @@ def main():
         fight(enemy_list, player)
 
 
-def valid_target(amount, enemy_list):
-    enemy_len = list(map(str, range(1, len(enemy_list) + 1)))
-    enemy_race_list = [enemy.race for enemy in enemy_list]
-    while True:
-        if not amount.strip():
-            print(f"\n{MAGENTA}Ты же ничего не ввёл")
-        elif amount not in enemy_race_list and amount not in enemy_len:
-            print(f"\n{MAGENTA}Такого врага тут нет, возможно ты ошибся")
-        else:
-            break
-        amount = input(f"{YELLOW}Попробуй ещё разок: ").capitalize()
-    if amount.isalpha():
-        amount = enemy_race_list.index(amount) + 1
-    return int(amount) - 1
-
-
 def fight(enemy_list, player):
     target = valid_target(input(f"{YELLOW}Выберите кого атаковать: ").capitalize(), enemy_list)
     player.attack(enemy_list[target])
     Enemy.enemy_attacks(enemy_list, player)
+
+
+def valid_target(value, enemy_list):
+    enemy_len = list(map(str, range(1, len(enemy_list) + 1)))
+    enemy_race_list = [enemy.race for enemy in enemy_list]
+    while True:
+        if not value.strip():
+            print(f"\n{MAGENTA}Ты же ничего не ввёл")
+        elif value not in enemy_race_list and value not in enemy_len:
+            print(f"\n{MAGENTA}Такого врага тут нет, возможно ты ошибся")
+        else:
+            break
+        value = input(f"{YELLOW}Попробуй ещё разок: ").capitalize()
+    if value.isalpha():
+        value = enemy_race_list.index(value) + 1
+    return int(value) - 1
 
 
 if __name__ == "__main__":

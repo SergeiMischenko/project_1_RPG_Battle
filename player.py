@@ -77,34 +77,34 @@ class Player:
         return name
 
     @classmethod
-    def _valid_class(cls, amount):
+    def _valid_class(cls, value):
         classes_len = list(map(str, range(1, len(cls.CLASSES) + 1)))
         while True:
-            if not amount.strip():
+            if not value.strip():
                 print(f"\n{MAGENTA}Ты же ничего не ввёл")
-            elif amount not in cls.CLASSES and amount not in classes_len:
+            elif value not in cls.CLASSES and value not in classes_len:
                 print(f"\n{MAGENTA}Такого класса не существует, возможно ты ошибся")
             else:
                 break
-            amount = input(f"{YELLOW}Попробуй ещё разок: ").capitalize()
-        if amount.isdigit():
-            amount = list(cls.CLASSES.keys())[int(amount) - 1]
-        return amount
+            value = input(f"{YELLOW}Попробуй ещё разок: ").capitalize()
+        if value.isdigit():
+            value = list(cls.CLASSES.keys())[int(value) - 1]
+        return value
 
     @classmethod
-    def _valid_weapon(cls, amount, class_):
+    def _valid_weapon(cls, value, class_):
         class_weapon_len = list(map(str, range(1, len(cls.CLASSES[class_]) + 1)))
         while True:
-            if not amount.strip():
+            if not value.strip():
                 print(f"\n{MAGENTA}Ты же ничего не ввёл")
-            elif amount not in cls.CLASSES[class_] and amount not in class_weapon_len:
+            elif value not in cls.CLASSES[class_] and value not in class_weapon_len:
                 print(f"\n{MAGENTA}Такого оружия не существует, возможно ты ошибся")
             else:
                 break
-            amount = input(f"{YELLOW}Попробуй ещё разок: ").capitalize()
-        if amount.isdigit():
-            amount = list(cls.CLASSES[class_].keys())[int(amount) - 1]
-        return amount
+            value = input(f"{YELLOW}Попробуй ещё разок: ").capitalize()
+        if value.isdigit():
+            value = list(cls.CLASSES[class_].keys())[int(value) - 1]
+        return value
 
     @classmethod
     def _print_list(cls, class_=None):
@@ -114,7 +114,7 @@ class Player:
             case _:
                 classes = cls.CLASSES[class_]
         print('-' * 20)
-        for ind, amount in enumerate(classes, 1):
-            print(f"{RED}\t{ind}. {amount}")
+        for ind, value in enumerate(classes, 1):
+            print(f"{RED}\t{ind}. {value}")
         print('-' * 20)
         sleep(1)
