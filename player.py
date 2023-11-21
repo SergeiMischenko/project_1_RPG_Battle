@@ -1,19 +1,20 @@
 from random import randint
 from time import sleep
 from my_coloram import MAGENTA, BLUE, YELLOW, RED
+from string import digits
 
 
 class Player:
-    player_classes = {"Воин": {"Двуручный Меч": 20, "Топорик": 15, "Кувалда": 18, "Меч И Щит": 10},
-                      "Рейнджер": {"Кинжал": 8, "Меч": 12, "Лук": 16, "Арбалет": 18},
-                      "Маг": {"Посох": 12, "Жезл": 15, "Магический Шар": 10}}
+    CLASSES = {"Воин": {"Двуручный меч": 20, "Топорик": 15, "Кувалда": 18, "Меч и щит": 10},
+               "Рейнджер": {"Кинжал": 8, "Меч": 12, "Лук": 16, "Арбалет": 18},
+               "Маг": {"Посох": 12, "Жезл": 15, "Магический шар": 10}}
 
     def __init__(self, name, class_, weapon):
         self.name = name
         self.class_ = class_
         self.hp = 50
         self.weapon = weapon
-        self.damage = self.player_classes[self.class_][self.weapon]
+        self.damage = self.CLASSES[self.class_][self.weapon]
         match class_:
             case "Воин":
                 match weapon:
@@ -38,95 +39,82 @@ class Player:
         else:
             object.__setattr__(self, key, value)
 
-    def get_attack(self, enemy):
-        damage = self.damage - (self.damage * enemy.armor / 100)
-        enemy.hp = round(enemy.hp - damage)
+    @staticmethod
+    def valid_name(name):
+        while True:
+            if not name:
+                print(f"\n{MAGENTA}Имя не может быть пустым")
+            elif name.startswith(tuple(digits)):
+                print(f"\n{MAGENTA}Имя не может начинаться с цифр")
+            else:
+                break
+            name = input(f"{YELLOW}Попробуй другое имя: ").strip()
+        return name
+
+    @classmethod
+    def valid_class(cls, amount):
+        classes_len = list(map(str, range(1, len(cls.CLASSES) + 1)))
+        while True:
+            if not amount.strip():
+                print(f"\n{MAGENTA}Ты же ничего не ввёл")
+            elif amount not in cls.CLASSES and amount not in classes_len:
+                print(f"\n{MAGENTA}Такого класса не существует, возможно ты ошибся")
+            else:
+                break
+            amount = input(f"{YELLOW}Попробуй ещё разок: ").capitalize()
+        if amount.isdigit():
+            amount = list(cls.CLASSES.keys())[int(amount) - 1]
+        return amount
+
+    @classmethod
+    def valid_weapon(cls, amount, class_):
+        class_weapon_len = list(map(str, range(1, len(cls.CLASSES[class_]) + 1)))
+        while True:
+            if not amount.strip():
+                print(f"\n{MAGENTA}Ты же ничего не ввёл")
+            elif amount not in cls.CLASSES[class_] and amount not in class_weapon_len:
+                print(f"\n{MAGENTA}Такого оружия не существует, возможно ты ошибся")
+            else:
+                break
+            amount = input(f"{YELLOW}Попробуй ещё разок: ").capitalize()
+        if amount.isdigit():
+            amount = list(cls.CLASSES[class_].keys())[int(amount) - 1]
+        return amount
+
+    @classmethod
+    def print_list(cls, class_=None):
+        match class_:
+            case None:
+                classes = cls.CLASSES
+            case _:
+                classes = cls.CLASSES[class_]
+        print('-' * 20)
+        for ind, amount in enumerate(classes, 1):
+            print(f"{RED}\t{ind}. {amount}")
+        print('-' * 20)
         sleep(1)
+
+    def attack(self, enemy):
+        damage_resist = self.damage * enemy.armor / 100
+        damage = round(self.damage - damage_resist)
+        enemy.hp -= damage
         print('-' * 20)
         print(f"{BLUE}{self.name}{YELLOW} наносит удар с помощью {BLUE}'{self.weapon}'"
-              f"{YELLOW} по {RED}'{enemy.race}у'{YELLOW}, урон: {RED}{round(damage)}")
+              f"{YELLOW} по {RED}'{enemy.race}у'{YELLOW}, урон: {RED}{damage}")
         if enemy.hp <= 0:
-            self.xp, self.gold, enemy.hp, enemy.xp, enemy.gold = self.xp + enemy.xp, self.gold + enemy.gold, 0, 0, 0
+            self.xp, self.gold = self.xp + enemy.xp, self.gold + enemy.gold
+            enemy.hp, enemy.xp, enemy.gold = 0, 0, 0
             print(f"{RED}'{enemy.race}' {YELLOW}повержен от вашей руки")
         else:
-            print(f"{YELLOW}У {RED}'{enemy.race}а'{YELLOW} осталось {RED}{enemy.hp} {YELLOW}очков здоровья")
+            print(f"{YELLOW}У {RED}'{enemy.race}а'{YELLOW} осталось {RED}{enemy.hp} {YELLOW}ОЗ")
         print('-' * 20)
         sleep(2)
 
 
 def create_player():
-    print('-' * 35)
-    name_player = valid_name(input(f"{YELLOW}Введи имя своего героя: "))
-
-    print('-' * 20)
-    for ind, amount in enumerate(Player.player_classes, 1):
-        print(f"{RED}\t{ind}. {amount}")
-    print('-' * 20)
-    sleep(1)
-    class_ = valid_class(input(f"{BLUE}{name_player}{YELLOW} выбери класс из списка выше: "), Player.player_classes)
-
-    print('-' * 20)
-    for ind, amount in enumerate(Player.player_classes[class_], 1):
-        print(f"{RED}\t{ind}. {amount}")
-    print('-' * 20)
-    sleep(1)
-    weapon = valid_weapon(input(f"{BLUE}{name_player}{YELLOW} выбери оружие из списка выше: "), Player.player_classes,
-                          class_)
-    return Player(name_player, class_, weapon)
-
-
-def valid_name(name):
-    while True:
-        if not name.strip():
-            print(f"\n{MAGENTA}Имя не может быть пустым")
-        elif name.strip().startswith(tuple(str(map(str, range(10))))):
-            print(f"\n{MAGENTA}Имя не может начинаться с цифр или пробела")
-        else:
-            break
-        name = input(f"{YELLOW}Попробуй другое имя: ")
-    return name
-
-
-def valid_class(amount, classes):
-    while True:
-        if not amount.strip():
-            print(f"\n{MAGENTA}Ты же ничего не ввёл")
-        elif amount.title() not in classes and amount not in map(str, range(1, len(classes) + 1)):
-            print(f"\n{MAGENTA}Такого класса не существует, возможно ты ошибся")
-        else:
-            break
-        amount = input(f"{YELLOW}Попробуй ещё разок: ")
-    if amount.isdigit():
-        amount = list(classes.keys())[int(amount) - 1]
-    return amount.title()
-
-
-def valid_weapon(amount, classes, class_):
-    while True:
-        if not amount.strip():
-            print(f"\n{MAGENTA}Ты же ничего не ввёл")
-        elif amount.title() not in classes[class_] and amount not in map(str, range(1, len(classes[class_]) + 1)):
-            print(f"\n{MAGENTA}Такого оружия не существует, возможно ты ошибся")
-        else:
-            break
-        amount = input(f"{YELLOW}Попробуй ещё разок: ")
-    if amount.isdigit():
-        amount = list(classes[class_].keys())[int(amount) - 1]
-    return amount.title()
-
-
-def valid_target(amount, enemy_list):
-    while True:
-        if not amount.strip():
-            print(f"\n{MAGENTA}Ты же ничего не ввёл")
-        elif amount.title() not in [i.race for i in enemy_list] and amount not in map(str,
-                                                                                      range(1, len(enemy_list) + 1)):
-            print(f"\n{MAGENTA}Такого врага тут нет, возможно ты ошибся")
-        else:
-            break
-        amount = input(f"{YELLOW}Попробуй ещё разок: ")
-    if amount.isalpha():
-        amount = ''.join([str(ind) for ind, value in enumerate(enemy_list) if value.race == amount.title()])
-    elif amount.isdigit():
-        amount = int(amount) - 1
-    return int(amount)
+    name = Player.valid_name(input(f"{YELLOW}Введи имя своего героя: ").strip())
+    Player.print_list()
+    class_ = Player.valid_class(input(f"{BLUE}{name}{YELLOW} выбери класс из списка выше: ").capitalize())
+    Player.print_list(class_=class_)
+    weapon = Player.valid_weapon(input(f"{BLUE}{name}{YELLOW} выбери оружие из списка выше: ").capitalize(), class_)
+    return Player(name, class_, weapon)
