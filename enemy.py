@@ -1,4 +1,4 @@
-from random import randint, choice
+from random import randint, choice, randrange
 from time import sleep
 from my_coloram import MAGENTA, BLUE, YELLOW, RED
 
@@ -40,34 +40,36 @@ class Enemy:
         else:
             object.__setattr__(self, key, value)
 
-    def attack(self, player):
-        if self.get_status_enemy():
-            damage_resist = self.damage * player.armor / 100
-            damage = round(self.damage - damage_resist)
-            player.hp -= damage
-            print(
-                f"{RED}{self.race}{YELLOW} наносит удар с помощью {BLUE}'{self.weapon}'"
-                f"{YELLOW} по герою {BLUE}'{player.name}'{YELLOW}, урон: {RED}{damage}")
-            if player.hp < 0:
-                player.hp = 0
-                print(f"{BLUE}'{player.name}'{YELLOW} погиб в бою от руки {RED}'{self.race}а'")
-            else:
-                print(f"{BLUE}{player.name}{YELLOW} у вас осталось {RED}{player.hp} {YELLOW}ОЗ")
-            print('-' * 20)
-            sleep(2)
+    @classmethod
+    def create_enemy(cls, min_e=2, max_e=5):
+        enemy_list = []
+        for _ in range(randint(min_e, max_e)):
+            enemy_list.append(Enemy(choice(list(cls.ENEMY_RACES.keys()))))
+        return enemy_list
 
-    def get_status_enemy(self):
-        return self.hp > 0
+    @classmethod
+    def enemy_attacks(cls, enemy_list, player):
+        enemy_list = cls._get_list_live_enemy(enemy_list)
+        for enemy in enemy_list:
+            cls._attack(enemy, player)
+
+    def _attack(self, player):
+        damage_resist = self.damage * player.armor / 100
+        damage = round(self.damage - damage_resist)
+        player.hp -= damage
+        print(
+            f"{RED}{self.race}{YELLOW} наносит удар с помощью {BLUE}'{self.weapon}'"
+            f"{YELLOW} по герою {BLUE}'{player.name}'{YELLOW}, урон: {RED}{damage}")
+        if player.hp < 0:
+            player.hp = 0
+            print(f"{BLUE}'{player.name}'{YELLOW} погиб в бою от руки {RED}'{self.race}а'")
+        else:
+            print(f"{BLUE}{player.name}{YELLOW} у вас осталось {RED}{player.hp} {YELLOW}ОЗ")
+        print('-' * 20)
+        sleep(1)
 
     @staticmethod
-    def print_list_enemy(enemy_list):
-        print("*" * 20)
-        for ind, enemy in enumerate(enemy_list, 1):
-            print(f"{RED}{ind}. {enemy.race} ({enemy.hp}) ОЗ")
-        print("*" * 20)
-
-    @staticmethod
-    def get_list_live_enemy(enemy_list):
+    def _get_list_live_enemy(enemy_list):
         ind = 0
         while ind < len(enemy_list):
             if enemy_list[ind].hp <= 0:
@@ -75,7 +77,9 @@ class Enemy:
             ind += 1
         return enemy_list
 
-
-def create_enemy():
-    enemy_list = [Enemy('Гоблин'), Enemy('Орк'), Enemy('Чернокнижник')]
-    return enemy_list
+    @staticmethod
+    def print_list_enemy(enemy_list):
+        print("*" * 20)
+        for ind, enemy in enumerate(enemy_list, 1):
+            print(f"{RED}{ind}. {enemy.race} ({enemy.hp}) ОЗ")
+        print("*" * 20)
