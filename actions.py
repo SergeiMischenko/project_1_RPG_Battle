@@ -27,6 +27,9 @@ class Action:
             case "5" | "Сбежать с поля боя" | "Бежать":
                 enemy.Enemy.enemy_attacks(enemy_list, player)
                 player.escaped = True
+            case _:
+                print(f"\n{MAGENTA}Такого действия ты не можешь совершить, возможно ты ошибся")
+                Action.get_action(enemy_list, player, text=f"{YELLOW}Попробуй ещё разок: ")
 
     @classmethod
     def print_list_actions(cls):
@@ -36,8 +39,10 @@ class Action:
         print("-*" * 20)
 
     @staticmethod
-    def get_action(enemy_list, player):
-        return Action.handler_action(input(f"{YELLOW}Выберите ваше действие из списка выше: ").capitalize(),
+    def get_action(enemy_list, player, text=None):
+        if text is None:
+            text = "Выберите ваше действие из списка выше: "
+        return Action.handler_action(input(f"{YELLOW}{text}").capitalize(),
                                      enemy_list, player)
 
     @staticmethod
