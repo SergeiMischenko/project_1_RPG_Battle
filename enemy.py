@@ -49,7 +49,6 @@ class Enemy:
 
     @classmethod
     def enemy_attacks(cls, enemy_list, player, pl_buff_armor=0):
-        pl_buff_armor = Enemy.check_stand(player, pl_buff_armor)
         enemy_list = cls._get_list_live_enemy(enemy_list)
         for enemy in enemy_list:
             cls._attack(enemy, player, pl_buff_armor)
