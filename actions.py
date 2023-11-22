@@ -1,5 +1,5 @@
 import enemy
-from my_coloram import MAGENTA, YELLOW, RED
+from my_coloram import MAGENTA, YELLOW, RED, GREEN
 
 
 class Action:
@@ -12,12 +12,21 @@ class Action:
             case "1" | "Атаковать противника" | "Атаковать" | "Атака":
                 enemy.Enemy.print_list_enemy(enemy_list)
                 Action.do_attack(enemy_list, player)
+                Action.print_press_enter()
             case "2" | "Встать в защитную стойку" | "Встать" | "Стойка":
                 pl_buff_armor = 40
                 player.stand = True
                 enemy.Enemy.enemy_attacks(enemy_list, player, pl_buff_armor)
+                Action.print_press_enter()
             case "3" | "Осмотреть противника" | "Осмотреть":
                 enemy.Enemy.print_stats_enemy(enemy_list)
+                Action.print_press_enter()
+            case "4" | "О себе" | "Я":
+                player.print_stats_player()
+                Action.print_press_enter()
+            case "5" | "Сбежать с поля боя" | "Бежать":
+                enemy.Enemy.enemy_attacks(enemy_list, player)
+                player.escaped = True
 
     @classmethod
     def print_list_actions(cls):
@@ -52,3 +61,7 @@ class Action:
         if value.isalpha():
             value = enemy_race_list.index(value) + 1
         return int(value) - 1
+
+    @staticmethod
+    def print_press_enter():
+        input(f"{GREEN}Нажмите " + f"{RED}ENTER" + f"{GREEN} чтобы продолжить...")

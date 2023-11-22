@@ -13,6 +13,7 @@ class Player:
         self.name = name
         self.class_ = class_
         self.hp = 100
+        self.max_hp = self.hp
         self.weapon = weapon
         self.damage = self.CLASSES[self.class_][self.weapon]
         match class_:
@@ -29,6 +30,7 @@ class Player:
         self.xp = 0
         self.level = 1
         self.gold = 0
+        self.escaped = False
 
     def __getattribute__(self, item):
         return object.__getattribute__(self, item)
@@ -117,4 +119,11 @@ class Player:
         for ind, value in enumerate(classes, 1):
             print(f"{RED}\t{ind}. {value}")
         print('-' * 20)
+        sleep(1)
+
+    def print_stats_player(self):
+        sleep(1)
+        print(f"{BLUE}[{self.name}]{YELLOW} вы вооруженны {BLUE}[{self.weapon}]"
+              f"{YELLOW} с уроном {RED}[{self.damage}ед.] {YELLOW}у вас {BLUE}[{self.armor}ед.]{YELLOW} брони и "
+              f"{RED}[{self.hp}/{self.max_hp}]{YELLOW}ОЗ")
         sleep(1)

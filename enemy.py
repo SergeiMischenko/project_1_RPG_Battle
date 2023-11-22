@@ -1,7 +1,7 @@
 from random import randint, choice
 from time import sleep
 from actions import Action
-from my_coloram import MAGENTA, BLUE, YELLOW, RED, GREEN
+from my_coloram import MAGENTA, BLUE, YELLOW, RED
 
 
 class Enemy:
@@ -96,5 +96,4 @@ class Enemy:
         enemy = enemy_list[target]
         print(f"{RED}[{enemy.race}]{YELLOW} вооружён {BLUE}[{enemy.weapon}]{YELLOW} с уроном {RED}[{enemy.damage}ед.] "
               f"{YELLOW}у него {BLUE}[{enemy.armor}ед.]{YELLOW} брони и {RED}[{enemy.hp}/{enemy.max_hp}]{YELLOW}ОЗ")
-        sleep(2)
-        input(f"{GREEN}Нажмите " + f"{RED}ENTER" + f"{GREEN} чтобы продолжить...")
+        sleep(1)
