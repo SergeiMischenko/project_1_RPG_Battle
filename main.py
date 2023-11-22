@@ -20,7 +20,7 @@ def main():
             enemy_list = Enemy.create_enemy()
         elif player.escaped:
             sleep(1)
-            print(f"\n\t{RED}!!!---Ты позорно сбежал---!!!")
+            print(f"\t{RED}!!!---Ты позорно сбежал---!!!", end="")
             Action.die()
         Action.print_list_actions()
         Action.get_action(enemy_list, player)

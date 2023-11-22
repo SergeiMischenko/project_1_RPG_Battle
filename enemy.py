@@ -18,21 +18,21 @@ class Enemy:
                 self.weapon = choice(list(self.ENEMY_RACES[self.race].keys()))
                 self.damage = self.ENEMY_RACES[self.race][self.weapon]
                 self.armor = 5 + randint(0, 8)
-                self.xp = choice([5, 8, 10])
+                self.xp = choice([2, 4, 6])
             case 'Орк':
                 self.max_hp = randint(12, 20)
                 self.hp = self.max_hp
                 self.weapon = choice(list(self.ENEMY_RACES[self.race].keys()))
                 self.damage = self.ENEMY_RACES[self.race][self.weapon]
                 self.armor = 10 + randint(2, 15)
-                self.xp = choice([10, 12, 15, 20])
+                self.xp = choice([10, 12, 15])
             case 'Чернокнижник':
                 self.max_hp = randint(8, 12)
                 self.hp = self.max_hp
                 self.weapon = choice(list(self.ENEMY_RACES[self.race].keys()))
                 self.damage = self.ENEMY_RACES[self.race][self.weapon]
                 self.armor = 0 + randint(0, 5)
-                self.xp = choice([5, 8, 10, 12])
+                self.xp = choice([6, 8, 10])
         self.gold = randint(0, 20)
 
     def __getattribute__(self, item):
@@ -61,7 +61,7 @@ class Enemy:
     def _attack(self, player, pl_buff_armor=0):
         damage_resist = self.damage * (player.armor + pl_buff_armor) / 100
         damage = round(self.damage - damage_resist)
-        player.hp -= damage
+        player.hp = round(player.hp - damage)
         print(
             f"{RED}{self.race}{YELLOW} наносит удар с помощью {BLUE}'{self.weapon}'"
             f"{YELLOW} по герою {BLUE}'{player.name}'{YELLOW}, урон: {RED}{damage}")
@@ -87,7 +87,7 @@ class Enemy:
     def print_list_enemy(enemy_list):
         print("*" * 20)
         for ind, enemy in enumerate(enemy_list, 1):
-            print(f"{RED}{ind}. {enemy.race} ({enemy.hp}) ОЗ {enemy.xp} {enemy.gold}")
+            print(f"{RED}{ind}. {enemy.race} ({enemy.hp}) ОЗ")
         print("*" * 20)
 
     @staticmethod

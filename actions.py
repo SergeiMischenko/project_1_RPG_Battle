@@ -82,9 +82,10 @@ class Action:
         print(f"{CYAN}Вы убили всех ваших врагов, за бой получили "
               f"{YELLOW}['{cls.XP_FOR_FIGHT}' Опыта и '{cls.GOLD_FOR_FIGHT}' Золота]")
         print(f"{YELLOW}*" * 43)
-        player.xp, player.gold, cls.XP_FOR_FIGHT, cls.GOLD_FOR_FIGHT = cls.XP_FOR_FIGHT, cls.GOLD_FOR_FIGHT, 0, 0
+        player.check_and_change_lvl_up()
+        cls.XP_FOR_FIGHT, cls.GOLD_FOR_FIGHT = 0, 0
         while True:
-            choice = input(f"{YELLOW}Вы хотите продолжить? {RED}(Да/Нет){YELLOW}: ").capitalize()
+            choice = input(f"\n{YELLOW}Хотите продолжить? {RED}(Да/Нет){YELLOW}: ").capitalize()
             if choice == "Нет":
                 Action.die()
             elif choice == "Да":
