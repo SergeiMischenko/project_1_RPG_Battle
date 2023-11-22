@@ -1,6 +1,7 @@
 from player import Player
 from enemy import Enemy
-from my_coloram import MAGENTA, GREEN, YELLOW, RED
+from actions import Action
+from my_coloram import GREEN, RED
 
 
 def main():
@@ -13,30 +14,10 @@ def main():
         if not player.hp or not enemy_list:
             print(f"\n\t{RED}!!!-----ИГРА ОКОНЧЕНА-----!!!")
             break
-        Enemy.print_list_enemy(enemy_list)
-        fight(enemy_list, player)
-
-
-def fight(enemy_list, player):
-    target = valid_target(input(f"{YELLOW}Выберите кого атаковать: ").capitalize(), enemy_list)
-    player.attack(enemy_list[target])
-    Enemy.enemy_attacks(enemy_list, player)
-
-
-def valid_target(value, enemy_list):
-    enemy_len = list(map(str, range(1, len(enemy_list) + 1)))
-    enemy_race_list = [enemy.race for enemy in enemy_list]
-    while True:
-        if not value.strip():
-            print(f"\n{MAGENTA}Ты же ничего не ввёл")
-        elif value not in enemy_race_list and value not in enemy_len:
-            print(f"\n{MAGENTA}Такого врага тут нет, возможно ты ошибся")
-        else:
-            break
-        value = input(f"{YELLOW}Попробуй ещё разок: ").capitalize()
-    if value.isalpha():
-        value = enemy_race_list.index(value) + 1
-    return int(value) - 1
+        # Enemy.print_list_enemy(enemy_list)
+        Action.print_list_actions()
+        Action.get_action(enemy_list, player)
+        # Action.do_attack()
 
 
 if __name__ == "__main__":

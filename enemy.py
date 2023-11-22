@@ -1,12 +1,12 @@
-from random import randint, choice, randrange
+from random import randint, choice
 from time import sleep
 from my_coloram import MAGENTA, BLUE, YELLOW, RED
 
 
 class Enemy:
-    ENEMY_RACES = {"Гоблин": {"Палка": 4, "Кинжал": 7, "Метательные Ножи": 5},
+    ENEMY_RACES = {"Гоблин": {"Палка": 4, "Кинжал": 7, "Метательные ножи": 5},
                    "Орк": {"Дубина": 10, "Секира": 15, "Молот": 12},
-                   "Чернокнижник": {"Посох": 10, "Жезл": 12, "Магический Шар": 8}}
+                   "Чернокнижник": {"Посох": 10, "Жезл": 12, "Магический шар": 8}}
 
     def __init__(self, race):
         self.race = race
@@ -48,13 +48,14 @@ class Enemy:
         return enemy_list
 
     @classmethod
-    def enemy_attacks(cls, enemy_list, player):
+    def enemy_attacks(cls, enemy_list, player, pl_buff_armor=0):
+        pl_buff_armor = Enemy.check_stand(player, pl_buff_armor)
         enemy_list = cls._get_list_live_enemy(enemy_list)
         for enemy in enemy_list:
-            cls._attack(enemy, player)
+            cls._attack(enemy, player, pl_buff_armor)
 
-    def _attack(self, player):
-        damage_resist = self.damage * player.armor / 100
+    def _attack(self, player, pl_buff_armor=0):
+        damage_resist = self.damage * (player.armor + pl_buff_armor) / 100
         damage = round(self.damage - damage_resist)
         player.hp -= damage
         print(
