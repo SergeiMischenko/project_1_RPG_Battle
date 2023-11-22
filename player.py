@@ -13,8 +13,8 @@ class Player:
     def __init__(self, name, class_, weapon):
         self.name = name
         self.class_ = class_
-        self.hp = 100
-        self.max_hp = self.hp
+        self.max_hp = 100
+        self.hp = self.max_hp
         self.weapon = weapon
         self.damage = self.CLASSES[self.class_][self.weapon]
         match class_:

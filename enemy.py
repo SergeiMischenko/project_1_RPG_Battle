@@ -13,22 +13,22 @@ class Enemy:
         self.race = race
         match race:
             case 'Гоблин':
-                self.hp = randint(5, 8)
-                self.max_hp = self.hp
+                self.max_hp = randint(5, 8)
+                self.hp = self.max_hp
                 self.weapon = choice(list(self.ENEMY_RACES[self.race].keys()))
                 self.damage = self.ENEMY_RACES[self.race][self.weapon]
                 self.armor = 5 + randint(0, 8)
                 self.xp = choice([5, 8, 10])
             case 'Орк':
-                self.hp = randint(12, 20)
-                self.max_hp = self.hp
+                self.max_hp = randint(12, 20)
+                self.hp = self.max_hp
                 self.weapon = choice(list(self.ENEMY_RACES[self.race].keys()))
                 self.damage = self.ENEMY_RACES[self.race][self.weapon]
                 self.armor = 10 + randint(2, 15)
                 self.xp = choice([10, 12, 15, 20])
             case 'Чернокнижник':
-                self.hp = randint(8, 12)
-                self.max_hp = self.hp
+                self.max_hp = randint(8, 12)
+                self.hp = self.max_hp
                 self.weapon = choice(list(self.ENEMY_RACES[self.race].keys()))
                 self.damage = self.ENEMY_RACES[self.race][self.weapon]
                 self.armor = 0 + randint(0, 5)

@@ -84,7 +84,7 @@ class Action:
         print(f"{YELLOW}*" * 43)
         player.xp, player.gold, cls.XP_FOR_FIGHT, cls.GOLD_FOR_FIGHT = cls.XP_FOR_FIGHT, cls.GOLD_FOR_FIGHT, 0, 0
         while True:
-            choice = input(f"{YELLOW}Вы хотите продолжить играть? {RED}(Да/Нет){YELLOW}: ").capitalize()
+            choice = input(f"{YELLOW}Вы хотите продолжить? {RED}(Да/Нет){YELLOW}: ").capitalize()
             if choice == "Нет":
                 Action.die()
             elif choice == "Да":
