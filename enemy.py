@@ -1,6 +1,7 @@
 from random import randint, choice
 from time import sleep
-from my_coloram import MAGENTA, BLUE, YELLOW, RED
+from actions import Action
+from my_coloram import MAGENTA, BLUE, YELLOW, RED, GREEN
 
 
 class Enemy:
@@ -13,18 +14,21 @@ class Enemy:
         match race:
             case 'Гоблин':
                 self.hp = randint(5, 8)
+                self.max_hp = self.hp
                 self.weapon = choice(list(self.ENEMY_RACES[self.race].keys()))
                 self.damage = self.ENEMY_RACES[self.race][self.weapon]
                 self.armor = 5 + randint(0, 8)
                 self.xp = choice([5, 8, 10])
             case 'Орк':
                 self.hp = randint(12, 20)
+                self.max_hp = self.hp
                 self.weapon = choice(list(self.ENEMY_RACES[self.race].keys()))
                 self.damage = self.ENEMY_RACES[self.race][self.weapon]
                 self.armor = 10 + randint(2, 15)
                 self.xp = choice([10, 12, 15, 20])
             case 'Чернокнижник':
                 self.hp = randint(8, 12)
+                self.max_hp = self.hp
                 self.weapon = choice(list(self.ENEMY_RACES[self.race].keys()))
                 self.damage = self.ENEMY_RACES[self.race][self.weapon]
                 self.armor = 0 + randint(0, 5)
@@ -83,3 +87,14 @@ class Enemy:
         for ind, enemy in enumerate(enemy_list, 1):
             print(f"{RED}{ind}. {enemy.race} ({enemy.hp}) ОЗ")
         print("*" * 20)
+
+    @staticmethod
+    def print_stats_enemy(enemy_list):
+        Enemy.print_list_enemy(enemy_list)
+        target = Action.valid_target(input(f"{YELLOW}Кого из списка вы хотите осмотреть: ").capitalize(), enemy_list)
+        sleep(1)
+        enemy = enemy_list[target]
+        print(f"{RED}[{enemy.race}]{YELLOW} вооружён {BLUE}[{enemy.weapon}]{YELLOW} с уроном {RED}[{enemy.damage}ед.] "
+              f"{YELLOW}у него {BLUE}[{enemy.armor}ед.]{YELLOW} брони и {RED}[{enemy.hp}/{enemy.max_hp}]{YELLOW}ОЗ")
+        sleep(2)
+        input(f"{GREEN}Нажмите " + f"{RED}ENTER" + f"{GREEN} чтобы продолжить...")

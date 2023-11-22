@@ -1,4 +1,4 @@
-from enemy import Enemy
+import enemy
 from my_coloram import MAGENTA, YELLOW, RED
 
 
@@ -10,12 +10,14 @@ class Action:
     def handler_action(value, enemy_list, player):
         match value:
             case "1" | "Атаковать противника" | "Атаковать" | "Атака":
-                Enemy.print_list_enemy(enemy_list)
+                enemy.Enemy.print_list_enemy(enemy_list)
                 Action.do_attack(enemy_list, player)
             case "2" | "Встать в защитную стойку" | "Встать" | "Стойка":
                 pl_buff_armor = 40
                 player.stand = True
-                Enemy.enemy_attacks(enemy_list, player, pl_buff_armor)
+                enemy.Enemy.enemy_attacks(enemy_list, player, pl_buff_armor)
+            case "3" | "Осмотреть противника" | "Осмотреть":
+                enemy.Enemy.print_stats_enemy(enemy_list)
 
     @classmethod
     def print_list_actions(cls):
@@ -33,12 +35,12 @@ class Action:
     def do_attack(enemy_list, player):
         target = Action.valid_target(input(f"{YELLOW}Выберите кого атаковать: ").capitalize(), enemy_list)
         player.attack(enemy_list[target])
-        Enemy.enemy_attacks(enemy_list, player)
+        enemy.Enemy.enemy_attacks(enemy_list, player)
 
     @staticmethod
     def valid_target(value, enemy_list):
         enemy_len = list(map(str, range(1, len(enemy_list) + 1)))
-        enemy_race_list = [enemy.race for enemy in enemy_list]
+        enemy_race_list = [enemy_.race for enemy_ in enemy_list]
         while True:
             if not value.strip():
                 print(f"\n{MAGENTA}Ты же ничего не ввёл")
@@ -50,6 +52,3 @@ class Action:
         if value.isalpha():
             value = enemy_race_list.index(value) + 1
         return int(value) - 1
-
-
-Action = Action()
