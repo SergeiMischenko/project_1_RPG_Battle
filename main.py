@@ -1,8 +1,8 @@
-from player import Player
+from time import sleep
 from enemy import Enemy
+from player import Player
 from actions import Action
 from my_coloram import GREEN, RED
-from time import sleep
 
 
 def main():
@@ -12,14 +12,16 @@ def main():
     player = Player.create_player()
     enemy_list = Enemy.create_enemy()
     while True:
-        if not player.hp or not enemy_list:
-            print(f"\n\t{RED}!!!-----ИГРА ОКОНЧЕНА-----!!!")
-            break
-        if player.escaped:
+        if not player.hp:
+            sleep(1)
+            Action.die()
+        elif not enemy_list:
+            Action.end_fight(player)
+            enemy_list = Enemy.create_enemy()
+        elif player.escaped:
             sleep(1)
             print(f"\n\t{RED}!!!---Ты позорно сбежал---!!!")
-            print(f"\t{RED}!!!-----ИГРА ОКОНЧЕНА-----!!!")
-            break
+            Action.die()
         Action.print_list_actions()
         Action.get_action(enemy_list, player)
 

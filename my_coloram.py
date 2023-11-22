@@ -6,3 +6,4 @@ RED = colorama.Fore.RED
 BLUE = colorama.Fore.BLUE
 YELLOW = colorama.Fore.YELLOW
 MAGENTA = colorama.Fore.MAGENTA + colorama.Style.DIM
+CYAN = colorama.Fore.CYAN

@@ -1,7 +1,8 @@
-from random import randint
+import actions
 from time import sleep
-from my_coloram import MAGENTA, BLUE, YELLOW, RED
 from string import digits
+from random import randint
+from my_coloram import MAGENTA, BLUE, YELLOW, RED
 
 
 class Player:
@@ -58,7 +59,9 @@ class Player:
         print(f"{BLUE}{self.name}{YELLOW} наносит удар с помощью {BLUE}'{self.weapon}'"
               f"{YELLOW} по {RED}'{enemy.race}у'{YELLOW}, урон: {RED}{damage}")
         if enemy.hp <= 0:
-            self.xp, self.gold = self.xp + enemy.xp, self.gold + enemy.gold
+            # self.xp, self.gold = self.xp + enemy.xp, self.gold + enemy.gold
+            actions.Action.XP_FOR_FIGHT += enemy.xp
+            actions.Action.GOLD_FOR_FIGHT += enemy.gold
             enemy.hp, enemy.xp, enemy.gold = 0, 0, 0
             print(f"{RED}'{enemy.race}' {YELLOW}повержен от вашей руки")
         else:

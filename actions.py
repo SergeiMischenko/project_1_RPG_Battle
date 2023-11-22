@@ -1,10 +1,14 @@
 import enemy
-from my_coloram import MAGENTA, YELLOW, RED, GREEN
+from sys import exit
+from my_coloram import MAGENTA, YELLOW, RED, GREEN, CYAN
 
 
 class Action:
     ACTIONS = {1: "Атаковать противника", 2: "Встать в защитную стойку (+40 Брони на 1 ход)",
                3: "Осмотреть противника", 4: "О себе", 5: "Сбежать с поля боя"}
+
+    XP_FOR_FIGHT = 0
+    GOLD_FOR_FIGHT = 0
 
     @staticmethod
     def handler_action(value, enemy_list, player):
@@ -12,7 +16,8 @@ class Action:
             case "1" | "Атаковать противника" | "Атаковать" | "Атака":
                 enemy.Enemy.print_list_enemy(enemy_list)
                 Action.do_attack(enemy_list, player)
-                Action.print_press_enter()
+                if player.hp and enemy_list:
+                    Action.print_press_enter()
             case "2" | "Встать в защитную стойку" | "Встать" | "Стойка":
                 pl_buff_armor = 40
                 player.stand = True
@@ -70,3 +75,23 @@ class Action:
     @staticmethod
     def print_press_enter():
         input(f"{GREEN}Нажмите " + f"{RED}ENTER" + f"{GREEN} чтобы продолжить...")
+
+    @classmethod
+    def end_fight(cls, player):
+        print(f"{YELLOW}*" * 43)
+        print(f"{CYAN}Вы убили всех ваших врагов, за бой получили "
+              f"{YELLOW}['{cls.XP_FOR_FIGHT}' Опыта и '{cls.GOLD_FOR_FIGHT}' Золота]")
+        print(f"{YELLOW}*" * 43)
+        player.xp, player.gold, cls.XP_FOR_FIGHT, cls.GOLD_FOR_FIGHT = cls.XP_FOR_FIGHT, cls.GOLD_FOR_FIGHT, 0, 0
+        while True:
+            choice = input(f"{YELLOW}Вы хотите продолжить играть? {RED}(Да/Нет){YELLOW}: ").capitalize()
+            if choice == "Нет":
+                Action.die()
+            elif choice == "Да":
+                print()
+                break
+
+    @staticmethod
+    def die():
+        print(f"\n\t{RED}!!!-----ИГРА ОКОНЧЕНА-----!!!")
+        exit()

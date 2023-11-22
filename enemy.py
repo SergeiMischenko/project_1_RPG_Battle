@@ -1,6 +1,6 @@
-from random import randint, choice
+import actions
 from time import sleep
-from actions import Action
+from random import randint, choice
 from my_coloram import MAGENTA, BLUE, YELLOW, RED
 
 
@@ -56,6 +56,7 @@ class Enemy:
         enemy_list = cls._get_list_live_enemy(enemy_list)
         for enemy in enemy_list:
             cls._attack(enemy, player, pl_buff_armor)
+        print()
 
     def _attack(self, player, pl_buff_armor=0):
         damage_resist = self.damage * (player.armor + pl_buff_armor) / 100
@@ -67,6 +68,7 @@ class Enemy:
         if player.hp < 0:
             player.hp = 0
             print(f"{BLUE}'{player.name}'{YELLOW} погиб в бою от руки {RED}'{self.race}а'")
+            actions.Action.die()
         else:
             print(f"{BLUE}{player.name}{YELLOW} у вас осталось {RED}{player.hp} {YELLOW}ОЗ")
         print('-' * 20)
@@ -85,13 +87,14 @@ class Enemy:
     def print_list_enemy(enemy_list):
         print("*" * 20)
         for ind, enemy in enumerate(enemy_list, 1):
-            print(f"{RED}{ind}. {enemy.race} ({enemy.hp}) ОЗ")
+            print(f"{RED}{ind}. {enemy.race} ({enemy.hp}) ОЗ {enemy.xp} {enemy.gold}")
         print("*" * 20)
 
     @staticmethod
     def print_stats_enemy(enemy_list):
         Enemy.print_list_enemy(enemy_list)
-        target = Action.valid_target(input(f"{YELLOW}Кого из списка вы хотите осмотреть: ").capitalize(), enemy_list)
+        target = actions.Action.valid_target(input(f"{YELLOW}Кого из списка вы хотите осмотреть: ").capitalize(),
+                                             enemy_list)
         sleep(1)
         enemy = enemy_list[target]
         print(f"{RED}[{enemy.race}]{YELLOW} вооружён {BLUE}[{enemy.weapon}]{YELLOW} с уроном {RED}[{enemy.damage}ед.] "
