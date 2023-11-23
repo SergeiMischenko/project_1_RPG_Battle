@@ -1,8 +1,8 @@
-from time import sleep
-from enemy import Enemy
-from player import Player
-from actions import Action
 from my_coloram import GREEN, RED
+from actions import Action
+from player import Player
+from enemy import Enemy
+from time import sleep
 
 
 def main():
@@ -11,6 +11,7 @@ def main():
     print('-' * 35)
     player = Player.create_player()
     enemy_list = Enemy.create_enemy()
+    Action.meet_monster(enemy_list)
     while True:
         if not player.hp:
             sleep(1)
@@ -18,6 +19,7 @@ def main():
         elif not enemy_list:
             Action.end_fight(player)
             enemy_list = Enemy.create_enemy()
+            Action.meet_monster(enemy_list)
         elif player.escaped:
             sleep(1)
             print(f"\t{RED}!!!---Ты позорно сбежал---!!!", end="")

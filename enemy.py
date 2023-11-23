@@ -1,7 +1,7 @@
-import actions
-from time import sleep
-from random import randint, choice
 from my_coloram import MAGENTA, BLUE, YELLOW, RED
+from random import randint, choice
+from time import sleep
+import actions
 
 
 class Enemy:

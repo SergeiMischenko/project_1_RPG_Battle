@@ -1,6 +1,7 @@
-import enemy
-from sys import exit
 from my_coloram import MAGENTA, YELLOW, RED, GREEN, CYAN
+from time import sleep
+from sys import exit
+import enemy
 
 
 class Action:
@@ -76,6 +77,13 @@ class Action:
         return int(value) - 1
 
     @staticmethod
+    def meet_monster(enemy_list):
+        sleep(1)
+        print(f"{CYAN}Вы встретили противников, количество врагов: {RED}[{len(enemy_list)}]\n")
+        Action.print_press_enter()
+        sleep(1)
+
+    @staticmethod
     def print_press_enter():
         input(f"{GREEN}Нажмите " + f"{RED}ENTER" + f"{GREEN} чтобы продолжить...")
 
@@ -92,7 +100,6 @@ class Action:
             if choice == "Нет":
                 Action.die()
             elif choice == "Да":
-                print()
                 break
 
     @staticmethod

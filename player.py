@@ -1,8 +1,8 @@
-import actions
-from time import sleep
-from string import digits
-from random import randint
 from my_coloram import MAGENTA, BLUE, YELLOW, RED
+from random import randint
+from string import digits
+from time import sleep
+import actions
 
 
 class Player:
@@ -64,7 +64,7 @@ class Player:
         else:
             print(f"{YELLOW}У {RED}'{enemy.race}а'{YELLOW} осталось {RED}{enemy.hp} {YELLOW}ОЗ")
         print('-' * 20)
-        sleep(2)
+        sleep(1)
 
     @staticmethod
     def _valid_name(name):
