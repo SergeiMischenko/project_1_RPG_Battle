@@ -20,7 +20,7 @@ class Player:
         match class_:
             case "Воин":
                 match weapon:
-                    case "Меч и Щит":
+                    case "Меч и щит":
                         self.armor = 20 + randint(5, 15)
                     case _:
                         self.armor = 20
@@ -32,6 +32,7 @@ class Player:
         self.level = 1
         self.gold = 0
         self.escaped = False
+        self.stand = False
 
     def __setattr__(self, key, value):
         super().__setattr__(key, value)
@@ -123,11 +124,14 @@ class Player:
     def print_stats_player(self):
         sleep(1)
         next_lvl_up = self.get_xp_for_next_lvl() - self.xp
+        armor = self.armor
+        if self.stand:
+            armor = self.armor + 40
         print(f"\n{BLUE}[{self.name}]{YELLOW} вы вооруженны {BLUE}[{self.weapon}]"
-              f"{YELLOW} у него {RED}[{self.damage} ед. урона] {YELLOW}у вас {BLUE}[{self.armor} ед. брони]{YELLOW}, "
-              f"{RED}[{self.hp}/{self.max_hp} ОЗ]{YELLOW}")
+              f"{YELLOW} у него {RED}[{int(self.damage)} ед. урона] {YELLOW}у вас {BLUE}[{int(armor)} ед. брони]"
+              f"{YELLOW}, {RED}[{int(self.hp)}/{int(self.max_hp)} ОЗ]{YELLOW}")
         print(f"{YELLOW}Вы {BLUE}[{self.level}-го Уровня]{YELLOW} до следующего уровня осталось "
-              f"{BLUE}[{next_lvl_up} ед. опыта]\n")
+              f"{BLUE}[{int(next_lvl_up)} ед. опыта]\n")
         sleep(1)
 
     def check_and_change_lvl_up(self):
@@ -138,10 +142,10 @@ class Player:
             self.xp -= xp_for_lvl_up
             self.level = self.level + 1
             _5_percent = 0.05
-            self.max_hp += round(_5_percent * self.max_hp)
+            self.max_hp += _5_percent * self.max_hp
             self.hp = self.max_hp
-            self.damage += round(_5_percent * self.damage)
-            self.armor += round(_5_percent * self.armor)
+            self.damage += _5_percent * self.damage
+            self.armor += _5_percent * self.armor
             print(f"{BLUE}Вы повысили свой уровень на 1")
 
     def get_xp_for_next_lvl(self):

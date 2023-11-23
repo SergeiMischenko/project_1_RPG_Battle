@@ -18,10 +18,13 @@ class Action:
                 Action.do_attack(enemy_list, player)
                 if player.hp and enemy_list:
                     Action.print_press_enter()
+                player.stand = False
             case "2" | "Встать в защитную стойку" | "Встать" | "Стойка":
-                pl_buff_armor = 40
-                player.stand = True
-                enemy.Enemy.enemy_attacks(enemy_list, player, pl_buff_armor)
+                if player.stand:
+                    print(f"{MAGENTA}Вы уже в защитной стойке")
+                else:
+                    player.stand = True
+                    enemy.Enemy.enemy_attacks(enemy_list, player)
                 Action.print_press_enter()
             case "3" | "Осмотреть противника" | "Осмотреть":
                 enemy.Enemy.print_stats_enemy(enemy_list)

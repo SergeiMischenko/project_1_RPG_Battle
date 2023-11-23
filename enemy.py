@@ -7,7 +7,7 @@ from my_coloram import MAGENTA, BLUE, YELLOW, RED
 class Enemy:
     ENEMY_RACES = {"Гоблин": {"Палка": 4, "Кинжал": 7, "Метательные ножи": 5},
                    "Орк": {"Дубина": 10, "Секира": 15, "Молот": 12},
-                   "Чернокнижник": {"Посох": 10, "Жезл": 12, "Магический шар": 8}}
+                   "Некромант": {"Посох": 10, "Жезл": 12, "Магический шар": 8}}
 
     def __init__(self, race):
         self.race = race
@@ -26,7 +26,7 @@ class Enemy:
                 self.damage = self.ENEMY_RACES[self.race][self.weapon]
                 self.armor = 10 + randint(2, 15)
                 self.xp = choice([10, 12, 15])
-            case 'Чернокнижник':
+            case 'Некромант':
                 self.max_hp = randint(8, 12)
                 self.hp = self.max_hp
                 self.weapon = choice(list(self.ENEMY_RACES[self.race].keys()))
@@ -56,12 +56,16 @@ class Enemy:
         enemy_list = cls._get_list_live_enemy(enemy_list)
         for enemy in enemy_list:
             cls._attack(enemy, player, pl_buff_armor)
+        print('-' * 20)
+        print(f"{BLUE}{player.name}{YELLOW} у вас осталось {RED}{int(player.hp)} {YELLOW}ОЗ")
         print()
 
     def _attack(self, player, pl_buff_armor=0):
+        if player.stand:
+            pl_buff_armor = 40
         damage_resist = self.damage * (player.armor + pl_buff_armor) / 100
         damage = round(self.damage - damage_resist)
-        player.hp = round(player.hp - damage)
+        player.hp = player.hp - damage
         print(
             f"{RED}{self.race}{YELLOW} наносит удар с помощью {BLUE}'{self.weapon}'"
             f"{YELLOW} по герою {BLUE}'{player.name}'{YELLOW}, урон: {RED}{damage}")
@@ -69,9 +73,6 @@ class Enemy:
             player.hp = 0
             print(f"{BLUE}'{player.name}'{YELLOW} погиб в бою от руки {RED}'{self.race}а'")
             actions.Action.die()
-        else:
-            print(f"{BLUE}{player.name}{YELLOW} у вас осталось {RED}{player.hp} {YELLOW}ОЗ")
-        print('-' * 20)
         sleep(1)
 
     @staticmethod
