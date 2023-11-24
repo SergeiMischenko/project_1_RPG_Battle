@@ -1,9 +1,11 @@
-import events
-from my_coloram import MAGENTA, YELLOW, RED, GREEN, CYAN, BLUE
-from main import print_press_enter
-from events import Event
+"""Файл связанный с выбором действий в различных ситуациях"""
+
 from time import sleep
+
+from my_coloram import MAGENTA, YELLOW, RED, CYAN, BLUE
+import events
 import enemy
+import main
 
 
 class Action:
@@ -20,7 +22,7 @@ class Action:
                 enemy.Enemy.print_list_enemy(enemy_list)
                 Action._do_attack(enemy_list, player)
                 if player.hp and enemy_list:
-                    print_press_enter()
+                    main.print_press_enter()
                 player.stand = False
             case "2" | "Встать в защитную стойку" | "Встать" | "Стойка":
                 if player.stand:
@@ -28,13 +30,13 @@ class Action:
                 else:
                     player.stand = True
                     enemy.Enemy.enemy_attacks(enemy_list, player)
-                print_press_enter()
+                main.print_press_enter()
             case "3" | "Осмотреть противника" | "Осмотреть":
                 enemy.Enemy.print_stats_enemy(enemy_list)
-                print_press_enter()
+                main.print_press_enter()
             case "4" | "О себе" | "Я":
                 player.print_stats_player()
-                print_press_enter()
+                main.print_press_enter()
             case "5" | "Сбежать с поля боя" | "Бежать":
                 enemy.Enemy.enemy_attacks(enemy_list, player)
                 player.escaped = True

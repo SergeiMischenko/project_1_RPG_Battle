@@ -1,9 +1,11 @@
-import colorama
+"""Файл с созданными переменными из библиотеки colorama"""
 
-colorama.init(autoreset=True)
-GREEN = colorama.Fore.GREEN
-RED = colorama.Fore.RED
-BLUE = colorama.Fore.BLUE
-YELLOW = colorama.Fore.YELLOW
-MAGENTA = colorama.Fore.MAGENTA + colorama.Style.DIM
-CYAN = colorama.Fore.CYAN
+from colorama import init, Fore, Style
+
+init(autoreset=True)
+GREEN: str = Fore.GREEN
+RED: str = Fore.RED
+BLUE: str = Fore.BLUE
+YELLOW: str = Fore.YELLOW
+MAGENTA: str = Fore.MAGENTA + Style.DIM
+CYAN: str = Fore.CYAN

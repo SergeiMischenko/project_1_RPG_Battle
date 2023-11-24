@@ -1,8 +1,11 @@
-import events
-from my_coloram import MAGENTA, BLUE, YELLOW, RED
+"""Файл связанный с монстрами"""
+
 from random import randint, choice
 from time import sleep
+
+from my_coloram import BLUE, YELLOW, RED
 import actions
+import events
 
 
 class Enemy:

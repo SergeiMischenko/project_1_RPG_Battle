@@ -1,10 +1,13 @@
-from my_coloram import RED, CYAN, YELLOW, GREEN
-from main import print_press_enter
+"""Файл связанный с разными событиями"""
+
 from random import randint, choice
-import actions
-from enemy import Enemy
 from time import sleep
-from sys import exit
+import sys
+
+from my_coloram import RED, CYAN, YELLOW, GREEN
+from enemy import Enemy
+import actions
+import main
 
 
 class Event:
@@ -18,8 +21,9 @@ class Event:
             if not player.hp or player.escaped:
                 sleep(1)
                 if player.escaped:
-                    print(f"\t{RED}!!!---Ты позорно сбежал---!!!", end="")
-                Event.die()
+                    print(f"\t{RED}!!!---Ты позорно сбежал---!!!\n")
+                    player.escaped, enemy_list = False, None
+                    main.print_press_enter()
             elif enemy_list or situation > 8:
                 if not enemy_list:
                     enemy_list = Event._meet_monster()
@@ -38,7 +42,7 @@ class Event:
         sleep(1)
         enemy_list = Enemy.create_enemy()
         print(f"{CYAN}Вы встретили противников, количество врагов: {RED}[{len(enemy_list)}]")
-        print_press_enter()
+        main.print_press_enter()
         return enemy_list
 
     @staticmethod
@@ -59,4 +63,4 @@ class Event:
     @staticmethod
     def die():
         print(f"\n\t{RED}!!!-----ИГРА ОКОНЧЕНА-----!!!")
-        exit()
+        sys.exit()

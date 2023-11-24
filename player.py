@@ -1,7 +1,10 @@
-from my_coloram import MAGENTA, BLUE, YELLOW, RED
+"""Файл связанный с Главным Героем"""
+
 from random import randint
 from string import digits
 from time import sleep
+
+from my_coloram import MAGENTA, BLUE, YELLOW, RED
 import actions
 
 

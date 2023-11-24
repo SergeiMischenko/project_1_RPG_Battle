@@ -1,3 +1,5 @@
+"""Главный исполняемый файл"""
+
 from my_coloram import GREEN, RED
 import player
 import events
