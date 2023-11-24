@@ -1,6 +1,8 @@
-from my_coloram import MAGENTA, YELLOW, RED, GREEN, CYAN
+import events
+from my_coloram import MAGENTA, YELLOW, RED, GREEN, CYAN, BLUE
+from main import print_press_enter
+from events import Event
 from time import sleep
-from sys import exit
 import enemy
 
 
@@ -12,13 +14,13 @@ class Action:
     GOLD_FOR_FIGHT = 0
 
     @staticmethod
-    def handler_action(value, enemy_list, player):
+    def _handler_action(value, enemy_list, player):
         match value:
             case "1" | "Атаковать противника" | "Атаковать" | "Атака":
                 enemy.Enemy.print_list_enemy(enemy_list)
-                Action.do_attack(enemy_list, player)
+                Action._do_attack(enemy_list, player)
                 if player.hp and enemy_list:
-                    Action.print_press_enter()
+                    print_press_enter()
                 player.stand = False
             case "2" | "Встать в защитную стойку" | "Встать" | "Стойка":
                 if player.stand:
@@ -26,13 +28,13 @@ class Action:
                 else:
                     player.stand = True
                     enemy.Enemy.enemy_attacks(enemy_list, player)
-                Action.print_press_enter()
+                print_press_enter()
             case "3" | "Осмотреть противника" | "Осмотреть":
                 enemy.Enemy.print_stats_enemy(enemy_list)
-                Action.print_press_enter()
+                print_press_enter()
             case "4" | "О себе" | "Я":
                 player.print_stats_player()
-                Action.print_press_enter()
+                print_press_enter()
             case "5" | "Сбежать с поля боя" | "Бежать":
                 enemy.Enemy.enemy_attacks(enemy_list, player)
                 player.escaped = True
@@ -51,11 +53,11 @@ class Action:
     def get_action(enemy_list, player, text=None):
         if text is None:
             text = "Выберите ваше действие из списка выше: "
-        return Action.handler_action(input(f"{YELLOW}{text}").capitalize(),
-                                     enemy_list, player)
+        return Action._handler_action(input(f"{YELLOW}{text}").capitalize(),
+                                      enemy_list, player)
 
     @staticmethod
-    def do_attack(enemy_list, player):
+    def _do_attack(enemy_list, player):
         target = Action.valid_target(input(f"{YELLOW}Выберите кого атаковать: ").capitalize(), enemy_list)
         player.attack(enemy_list[target])
         enemy.Enemy.enemy_attacks(enemy_list, player)
@@ -76,17 +78,6 @@ class Action:
             value = enemy_race_list.index(value) + 1
         return int(value) - 1
 
-    @staticmethod
-    def meet_monster(enemy_list):
-        sleep(1)
-        print(f"{CYAN}Вы встретили противников, количество врагов: {RED}[{len(enemy_list)}]\n")
-        Action.print_press_enter()
-        sleep(1)
-
-    @staticmethod
-    def print_press_enter():
-        input(f"{GREEN}Нажмите " + f"{RED}ENTER" + f"{GREEN} чтобы продолжить...")
-
     @classmethod
     def end_fight(cls, player):
         print(f"{YELLOW}*" * 43)
@@ -98,11 +89,35 @@ class Action:
         while True:
             choice = input(f"\n{YELLOW}Хотите продолжить? {RED}(Да/Нет){YELLOW}: ").capitalize()
             if choice == "Нет":
-                Action.die()
+                events.Event.die()
             elif choice == "Да":
                 break
 
     @staticmethod
-    def die():
-        print(f"\n\t{RED}!!!-----ИГРА ОКОНЧЕНА-----!!!")
-        exit()
+    def healing_at_the_medic(player, choice=None):
+        while True:
+            print(f"{BLUE}У вас в кармане {YELLOW}[{player.gold} Золота]{BLUE} ваше здоровье: "
+                  f"{RED}[{int(player.hp)}/{int(player.max_hp)}]")
+            value = input(f"{YELLOW}Сколько здоровья хотите вылечить? ({RED}1 ОЗ {YELLOW}- {YELLOW}1 Золотая): ")
+            sleep(1)
+            if player.gold < int(value):
+                print(f"{MAGENTA}У вас не достаточно золота в кармане\n")
+                continue
+            if int(value) >= int(player.max_hp - player.hp):
+                print(f"\n{YELLOW}Ваше здоровье полностью восстановлено")
+                player.gold -= (player.max_hp - player.hp)
+                player.hp = player.max_hp
+                break
+            player.hp += int(value)
+            player.gold -= int(value)
+            print(f"\n{YELLOW}Травник излечил вас на {RED}[{value} ОЗ]{YELLOW} у вас {RED}[{int(player.hp)} ОЗ]"
+                  f"{YELLOW} и [{player.gold} Золота] в кармане")
+            if player.gold and (int(player.hp) != int(player.max_hp)):
+                while choice != "Уйти":
+                    choice = input(f"{CYAN}Вы хотите продолжить свой путь или купить ещё здоровья? "
+                                   f"{RED}(Купить/Уйти): ").capitalize()
+                    print()
+                    if choice == "Купить":
+                        Action.healing_at_the_medic(player)
+                        break
+            break

@@ -123,7 +123,7 @@ class Player:
 
     def print_stats_player(self):
         sleep(1)
-        next_lvl_up = self.get_xp_for_next_lvl() - self.xp
+        next_lvl_up = self._get_xp_for_next_lvl() - self.xp
         armor = self.armor
         if self.stand:
             armor = self.armor + 40
@@ -137,17 +137,19 @@ class Player:
     def check_and_change_lvl_up(self):
         self.xp += actions.Action.XP_FOR_FIGHT
         self.gold += actions.Action.GOLD_FOR_FIGHT
-        xp_for_lvl_up = self.get_xp_for_next_lvl()
+        xp_for_lvl_up = self._get_xp_for_next_lvl()
         while self.xp >= xp_for_lvl_up:
             self.xp -= xp_for_lvl_up
             self.level = self.level + 1
             _5_percent = 0.05
             self.max_hp += _5_percent * self.max_hp
-            self.hp = self.max_hp
+            self.hp += 50
+            if self.hp > self.max_hp:
+                self.hp = self.max_hp
             self.damage += _5_percent * self.damage
             self.armor += _5_percent * self.armor
             print(f"{BLUE}Вы повысили свой уровень на 1")
 
-    def get_xp_for_next_lvl(self):
+    def _get_xp_for_next_lvl(self):
         percent_for_lvl_up = (self.level - 1) * 0.2
         return round(percent_for_lvl_up * 30 + 30)

@@ -1,3 +1,4 @@
+import events
 from my_coloram import MAGENTA, BLUE, YELLOW, RED
 from random import randint, choice
 from time import sleep
@@ -33,16 +34,13 @@ class Enemy:
                 self.damage = self.ENEMY_RACES[self.race][self.weapon]
                 self.armor = 0 + randint(0, 5)
                 self.xp = choice([6, 8, 10])
-        self.gold = randint(0, 20)
-
-    def __getattribute__(self, item):
-        return object.__getattribute__(self, item)
+        self.gold = randint(0, 10)
 
     def __setattr__(self, key, value):
-        if key == 'race' and hasattr(self, 'race'):
-            print(f'{MAGENTA}Вы не можете изменять расу врага')
-        else:
-            object.__setattr__(self, key, value)
+        super().__setattr__(key, value)
+
+    def __getattribute__(self, item):
+        return super().__getattribute__(item)
 
     @classmethod
     def create_enemy(cls, min_e=2, max_e=5):
@@ -72,7 +70,7 @@ class Enemy:
         if player.hp < 0:
             player.hp = 0
             print(f"{BLUE}'{player.name}'{YELLOW} погиб в бою от руки {RED}'{self.race}а'")
-            actions.Action.die()
+            events.Event.die()
         sleep(1)
 
     @staticmethod
@@ -99,5 +97,5 @@ class Enemy:
         sleep(1)
         enemy = enemy_list[target]
         print(f"{RED}[{enemy.race}]{YELLOW} вооружён {BLUE}[{enemy.weapon}]{YELLOW} с уроном {RED}[{enemy.damage}ед.] "
-              f"{YELLOW}у него {BLUE}[{enemy.armor}ед.]{YELLOW} брони и {RED}[{enemy.hp}/{enemy.max_hp}]{YELLOW}ОЗ")
+              f"{YELLOW}у него {BLUE}[{enemy.armor}ед. брони]{YELLOW} и {RED}[{enemy.hp}/{enemy.max_hp} ОЗ]")
         sleep(1)

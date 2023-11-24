@@ -1,31 +1,18 @@
 from my_coloram import GREEN, RED
-from actions import Action
-from player import Player
-from enemy import Enemy
-from time import sleep
+import player
+import events
 
 
 def main():
     print(f"{GREEN}Приветствуем вас в игре RPG Danger, сейчас вам предстоит создать своего персонажа.")
-    Action.print_press_enter()
+    print_press_enter()
     print('-' * 35)
-    player = Player.create_player()
-    enemy_list = Enemy.create_enemy()
-    Action.meet_monster(enemy_list)
-    while True:
-        if not player.hp:
-            sleep(1)
-            Action.die()
-        elif not enemy_list:
-            Action.end_fight(player)
-            enemy_list = Enemy.create_enemy()
-            Action.meet_monster(enemy_list)
-        elif player.escaped:
-            sleep(1)
-            print(f"\t{RED}!!!---Ты позорно сбежал---!!!", end="")
-            Action.die()
-        Action.print_list_actions()
-        Action.get_action(enemy_list, player)
+    player1 = player.Player.create_player()
+    events.Event.situation(player1, enemy_list=None)
+
+
+def print_press_enter():
+    input(f"{GREEN}Нажмите " + f"{RED}ENTER" + f"{GREEN} чтобы продолжить...")
 
 
 if __name__ == "__main__":
