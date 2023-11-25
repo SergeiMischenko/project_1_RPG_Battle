@@ -36,6 +36,7 @@ class Player:
         self.gold = 0
         self.escaped = False
         self.stand = False
+        self.quest = False
 
     def __setattr__(self, key, value):
         super().__setattr__(key, value)
@@ -45,11 +46,12 @@ class Player:
 
     @classmethod
     def create_player(cls):
-        name = cls._valid_name(input(f"{YELLOW}Введи имя своего героя: ").strip())
+        name = cls._valid_name(input(f"{YELLOW}Введите имя для вашего персонажа:").strip())
         cls._print_list()
-        class_ = cls._valid_class(input(f"{BLUE}{name}{YELLOW} выбери класс из списка выше: ").capitalize())
+        class_ = cls._valid_class(input(f"{BLUE}{name}{YELLOW} выберите класс из списка выше: ").capitalize())
         cls._print_list(class_=class_)
-        weapon = cls._valid_weapon(input(f"{BLUE}{name}{YELLOW} выбери оружие из списка выше: ").capitalize(), class_)
+        weapon = cls._valid_weapon(input(f"{BLUE}{name}{YELLOW} выберите оружие из списка выше: ").capitalize(), class_)
+        sleep(1)
         return Player(name, class_, weapon)
 
     def attack(self, enemy):
@@ -151,7 +153,7 @@ class Player:
                 self.hp = self.max_hp
             self.damage += _5_percent * self.damage
             self.armor += _5_percent * self.armor
-            print(f"{BLUE}Вы повысили свой уровень на 1")
+            print(f"{BLUE}Поздравляю! В бою вам удалось повысить свои навыки.")
 
     def _get_xp_for_next_lvl(self):
         percent_for_lvl_up = (self.level - 1) * 0.2

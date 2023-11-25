@@ -83,9 +83,16 @@ class Action:
     @classmethod
     def end_fight(cls, player):
         print(f"{YELLOW}*" * 43)
-        print(f"{CYAN}Вы убили всех ваших врагов, за бой получили "
+        print(f"{CYAN}Вы одолели всех своих врагов и за этот бой получили "
               f"{YELLOW}['{cls.XP_FOR_FIGHT}' Опыта и '{cls.GOLD_FOR_FIGHT}' Золота]")
         print(f"{YELLOW}*" * 43)
+        if player.quest:
+            player.quest = False
+            quest_reward = (cls.XP_FOR_FIGHT * 0.75, cls.GOLD_FOR_FIGHT * 2)
+            cls.XP_FOR_FIGHT += quest_reward[0]
+            cls.GOLD_FOR_FIGHT += quest_reward[1]
+            print(f"{CYAN}За выполненное задание вы получили в награду: "
+                  f"{YELLOW}['{quest_reward[0]}' Опыта и '{quest_reward[1]}' Золота]")
         player.check_and_change_lvl_up()
         cls.XP_FOR_FIGHT, cls.GOLD_FOR_FIGHT = 0, 0
         while True:
@@ -116,7 +123,7 @@ class Action:
                   f"{YELLOW} и [{player.gold} Золота] в кармане")
             if player.gold and (int(player.hp) != int(player.max_hp)):
                 while choice != "Уйти":
-                    choice = input(f"{CYAN}Вы хотите продолжить свой путь или купить ещё здоровья? "
+                    choice = input(f"{CYAN}Желаете продолжить путешествие или приобрести дополнительные очки здоровья? "
                                    f"{RED}(Купить/Уйти): ").capitalize()
                     print()
                     if choice == "Купить":

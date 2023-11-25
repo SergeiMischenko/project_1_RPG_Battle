@@ -46,8 +46,10 @@ class Enemy:
         return super().__getattribute__(item)
 
     @classmethod
-    def create_enemy(cls, min_e=2, max_e=5):
+    def create_enemy(cls, player, min_e=2, max_e=4):
         enemy_list = []
+        if player.quest:
+            min_e, max_e = 4, 6
         for _ in range(randint(min_e, max_e)):
             enemy_list.append(Enemy(choice(list(cls.ENEMY_RACES.keys()))))
         return enemy_list
@@ -66,11 +68,11 @@ class Enemy:
             pl_buff_armor = 40
         damage_resist = self.damage * (player.armor + pl_buff_armor) / 100
         damage = round(self.damage - damage_resist)
-        player.hp = player.hp - damage
+        player.hp -= damage
         print(
             f"{RED}{self.race}{YELLOW} наносит удар с помощью {BLUE}'{self.weapon}'"
             f"{YELLOW} по герою {BLUE}'{player.name}'{YELLOW}, урон: {RED}{damage}")
-        if player.hp < 0:
+        if int(player.hp) <= 0:
             player.hp = 0
             print(f"{BLUE}'{player.name}'{YELLOW} погиб в бою от руки {RED}'{self.race}а'")
             events.Event.die()
