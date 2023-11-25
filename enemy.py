@@ -71,7 +71,7 @@ class Enemy:
         """
         enemy_list = []
         if player.quest:
-            min_e, max_e = 4, 6  # Если у героя взят квест, то противников создастся от 4 до 6 единиц
+            min_e, max_e = 4, 6  # Если у героя взят квест, противников создастся от 4 до 6 единиц
         for _ in range(randint(min_e, max_e)):
             enemy_list.append(Enemy(choice(list(cls.ENEMY_RACES.keys()))))
         return enemy_list

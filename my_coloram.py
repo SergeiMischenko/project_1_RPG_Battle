@@ -1,4 +1,4 @@
-"""Файл с созданными переменными из библиотеки colorama"""
+"""Файл для создания переменных из библиотеки colorama"""
 
 from colorama import init, Fore, Style
 

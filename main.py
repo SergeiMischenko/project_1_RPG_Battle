@@ -13,7 +13,7 @@ def main():
     print_press_enter()
     print('-' * 33)
     player = players.Player.create_player()  # Создание объекта player
-    print(f"\n{GREEN}Теперь твоё путешествие начинается и ты отправляешь в путь, на встречу приключениям...\n")
+    print(f"\n{GREEN}Теперь твоё путешествие начинается, ты отправляешь в путь, на встречу приключениям...\n")
     events.Event.situation(player, enemy_list=None)  # Запуск цикла событий с переданным объектом player
 
 

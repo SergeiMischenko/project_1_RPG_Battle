@@ -241,4 +241,4 @@ class Player:
                 self.hp = self.max_hp
             self.damage += _5_percent * self.damage
             self.armor += _5_percent * self.armor
-        print(f"{BLUE}Поздравляю! В бою вам удалось повысить свои навыки.")
+            print(f"{BLUE}Поздравляю! В бою вам удалось повысить свои навыки.")
