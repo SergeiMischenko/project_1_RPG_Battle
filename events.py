@@ -11,6 +11,15 @@ import main
 
 
 class Event:
+    """
+        Класс для представления событий в игровом цикле.
+        Attribute:
+            WALKS: list[str] Список событий, когда ничего не произошло
+            QUEST: list[str] Список событий, когда вы наткнулись на квестодателя
+        Public Methods:
+            situation(player, enemy_list=None)
+            die():
+        """
     WALKS = ["Скитаемся...", "Скитаемся среди холмов...", "Проходим мимо густых зарослей...",
              "Топаем по узкой тропинке...", "Идём вдоль реки...", "Идём по долине мимо старого моста...",
              "Блуждаем среди высоких трав...", "Топаем по пустошам...", "Проходим мимо старого замка...",
@@ -41,16 +50,31 @@ class Event:
 
     @staticmethod
     def situation(player, enemy_list=None):
+        """
+        Основной метод игрового цикла, где происходит случайная генерация событий.
+        Генерируется случайно число от 0 до 10вкл. (Если квест True, то число генерируется от 5 до 10)
+            0 - 4 Ничего не происходит и выводится случайное событие из WALKS.
+
+            5 Игроку попадается случайный квестодатель из QUESTS (Если у Героя есть уже квест то события не произойдёт).
+
+            6 - 8 Событие встречи с травником (Если у игрока есть золото и текущее здоровье != максимальному).
+
+            9 - 10 Событие встречи с монстрами.
+
+            Если игрок сбежал, то ему выдадут урон и игровой цикл перезапуститься.
+        :param player: Player
+            Объект Player
+        :param enemy_list: list[Enemy]
+            Список объектов Enemy
+        """
         while True:
             situation = randint(0, 10)
             if player.quest:
                 situation = randint(5, 10)
-            if not player.hp or player.escaped:
-                sleep(1)
-                if player.escaped:
-                    print(f"\t{RED}!!!---Ты позорно сбежал---!!!\n")
-                    player.escaped, enemy_list = False, None
-                    main.print_press_enter()
+            if player.escaped:
+                print(f"\t{RED}!!!---Ты позорно сбежал---!!!\n")
+                player.escaped, enemy_list = False, None
+                main.print_press_enter()
             elif enemy_list or situation > 8:
                 if not enemy_list:
                     enemy_list = Event._meet_monster(player)
@@ -70,6 +94,7 @@ class Event:
 
     @staticmethod
     def _meet_monster(player):
+        """Событие встречи с монстрами"""
         sleep(1)
         enemy_list = enemy.Enemy.create_enemy(player)
         print(f"{CYAN}Вы попали в западню, численность противника: {RED}[{len(enemy_list)}]")
@@ -78,6 +103,7 @@ class Event:
 
     @staticmethod
     def _meet_medic(player):
+        """Событие встречи с травником"""
         while True:
             select = input(f"{CYAN}Вы обнаружили Хижину Травника на вашем пути, каков ваш следующий шаг? "
                            f"{RED}(Войти/Уйти): ").capitalize()
@@ -87,12 +113,13 @@ class Event:
                 actions.Action.healing_at_the_medic(player)
                 print(f"{GREEN}Вы покинули уютную хижину травника и продолжили свое приключение.")
                 break
-            elif select == "Уйти":
+            if select == "Уйти":
                 break
         sleep(1)
 
     @staticmethod
     def _meet_quest(player):
+        """Событие встречи с квестодателем"""
         while True:
             select = input(f"{GREEN}Вы хотите взять это опасное задание? {RED}(Да/Нет): ").capitalize()
             if select == "Да":
@@ -100,7 +127,7 @@ class Event:
                 print(f"\n{YELLOW}Вы с некоторой настороженностью приняли на себя задачу по истреблению монстров.")
                 player.quest = True
                 break
-            elif select == "Нет":
+            if select == "Нет":
                 print(f"\n{YELLOW}Вы решаете отказаться от этого рискованного задания. И продолжаете свой путь")
                 break
         main.print_press_enter()
@@ -108,5 +135,6 @@ class Event:
 
     @staticmethod
     def die():
+        """Метод события смерть"""
         print(f"\n\t{RED}!!!-----ИГРА ОКОНЧЕНА-----!!!")
         sys.exit()
