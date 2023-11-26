@@ -178,7 +178,7 @@ class Action:
             player.hp += int(value)
             player.gold -= int(value)
             print(f"\n{YELLOW}Травник излечил вас на {RED}[{value} ОЗ]{YELLOW} у вас {RED}[{int(player.hp)} ОЗ]"
-                  f"{YELLOW} и [{player.gold} Золота] в кармане")
+                  f"{YELLOW} и [{int(player.gold)} Золота] в кармане")
             if player.gold and (int(player.hp) != int(player.max_hp)):
                 choice = None
                 while choice != "Уйти":

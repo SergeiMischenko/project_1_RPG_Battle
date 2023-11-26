@@ -32,8 +32,8 @@ class Event:
              "Проходим мимо скрытых пещер...", "Идём вдоль высоких скал...", "Блуждаем среди мрака ночи...",
              "Проходим мимо таинственных храмов...", "Идём вдоль берега моря...", "Блуждаем по бескрайним пустошам..."]
 
-    QUEST = ["Вы оказываетесь на таинственном магическом рынке, где таинственный торговец предлагает вам сделку: \n"
-             "он предоставит вам золото в обмен на истреблению опасных монстров, которые терроризируют его покупателей",
+    QUEST = ["Вы оказываетесь на магическом рынке, где таинственный торговец предлагает вам сделку: \n"
+             "он предоставит вам золото в обмен на истребление опасных монстров, которые терроризируют его покупателей",
              "Глубоко в лесу вы обнаруживаете загадочную чашу с огненным светом, из которой появляется древний дух. \n"
              "Дух говорит вам о древнем проклятии, и чтобы его разрушить, вам нужно истребить определенное количество "
              "монстров, стражей леса.",
@@ -82,15 +82,15 @@ class Event:
                 actions.Action.get_action(enemy_list, player)
                 if not enemy_list:
                     actions.Action.end_fight(player)
-            elif situation > 5 and player.hp != player.max_hp and player.gold:
+            elif situation > 6 and player.hp != player.max_hp and player.gold:
                 Event._meet_medic(player)
-            elif situation > 4 and not player.quest:
+            elif situation > 5 and not player.quest:
                 sleep(1)
                 print(f"{CYAN}{choice(Event.QUEST)}")
                 Event._meet_quest(player)
             else:
-                sleep(1)
-                input(f"{YELLOW}{choice(Event.WALKS)}")
+                print(f"{YELLOW}{choice(Event.WALKS)}")
+                sleep(2)
 
     @staticmethod
     def _meet_monster(player):
