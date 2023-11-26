@@ -82,12 +82,12 @@ class Event:
                 actions.Action.get_action(enemy_list, player)
                 if not enemy_list:
                     actions.Action.end_fight(player)
-            elif situation > 6 and player.hp != player.max_hp and player.gold:
-                Event._meet_medic(player)
-            elif situation > 5 and not player.quest:
+            elif situation > 6 and not player.quest:
                 sleep(1)
                 print(f"{CYAN}{choice(Event.QUEST)}")
                 Event._meet_quest(player)
+            elif situation > 5 and player.hp != player.max_hp and player.gold:
+                Event._meet_medic(player)
             else:
                 print(f"{YELLOW}{choice(Event.WALKS)}")
                 sleep(2)
